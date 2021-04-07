@@ -35,6 +35,7 @@ function productCountKeypress(event) {
 
 // Save
 function saveActionClick(event) {
+	removeDisabledTextInput();
 	if (!validateSave()) {
 		return;
 	}
@@ -131,7 +132,7 @@ function deleteActionClick(event) {
 		deleteActionElement.disabled = false;
 
 		if (isSuccessResponse(callbackResponse)) {
-			window.location.replace("/");
+			window.location.replace("/productListing");
 		}
 	});
 };
@@ -173,4 +174,19 @@ function getProductCount() {
 function getProductCountElement() {
 	return document.getElementById("productCount");
 }
+function removeDisabledTextInput() {
+	var disabledTextInput = document.getElementById("productLookupCodeDisabled");
+	disabledTextInput.parentNode.removeChild(disabledTextInput);
+	console.log("remove text input");
+}
 // End getters and setters
+
+function enableInputs(){
+	document.getElementById("productLookupCode").disabled = false;
+	document.getElementById("productLookupCode").disabled = false;
+}
+
+function disableInputs(){
+	document.getElementById("productLookupCode").disabled = true;
+	document.getElementById("productLookupCode").disabled = true;
+}
