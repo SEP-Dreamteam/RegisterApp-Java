@@ -48,7 +48,6 @@ public class ProductListingRouteController extends BaseRouteController{
 
 		modelAndView.addObject(ViewModelNames.IS_ELEVATED_USER.getValue(),
 			this.isElevatedUser(activeUserEntity.get()));
-		
 		return modelAndView;
 	}
 

@@ -1,6 +1,6 @@
 package edu.uark.registerapp.controllers;
 
-import java.io.Console;
+// import java.io.Console;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +20,7 @@ import edu.uark.registerapp.commands.exceptions.NotFoundException;
 import edu.uark.registerapp.commands.products.ProductCreateCommand;
 import edu.uark.registerapp.commands.products.ProductDeleteCommand;
 import edu.uark.registerapp.commands.products.ProductUpdateCommand;
+import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Product;
 
@@ -67,8 +68,25 @@ public class ProductRestController extends BaseRestController{
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.DELETE)
 	public @ResponseBody ApiResponse deleteProduct(
-		@PathVariable final UUID productId
+		@PathVariable final UUID productId,
+		final HttpServletRequest request,
+		final HttpServletResponse response
 	) {
+
+		ApiResponse canCreateEmployeeResponse;
+
+		try {
+			this.activeEmployeeExistsQuery.execute();
+
+			canCreateEmployeeResponse =
+				this.redirectUserNotElevated(request, response);
+		} catch (final NotFoundException e) {
+			canCreateEmployeeResponse = new ApiResponse();
+		}
+
+		if (!canCreateEmployeeResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
+			return canCreateEmployeeResponse;
+		}
 
 		this.productDeleteCommand
 			.setProductId(productId)

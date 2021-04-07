@@ -1,6 +1,9 @@
 package edu.uark.registerapp.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +17,45 @@ import edu.uark.registerapp.commands.products.ProductQuery;
 import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.Product;
+import edu.uark.registerapp.models.entities.ActiveUserEntity;
 
 @Controller
 @RequestMapping(value = "/productDetail")
-public class ProductDetailRouteController {
+public class ProductDetailRouteController extends BaseRouteController{
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView start() {
-		return (new ModelAndView(ViewNames.PRODUCT_DETAIL.getViewName()))
-			.addObject(
-				ViewModelNames.PRODUCT.getValue(),
-				(new Product()).setLookupCode(StringUtils.EMPTY).setCount(0));
+	public ModelAndView start(final HttpServletRequest httpServletRequest) {
+		ModelAndView theModel = (new ModelAndView(ViewNames.PRODUCT_DETAIL.getViewName()))
+		.addObject(
+			ViewModelNames.PRODUCT.getValue(),
+			(new Product()).setLookupCode(StringUtils.EMPTY).setCount(0));
+
+
+		final Optional<ActiveUserEntity> activeUserEntity =
+		this.getCurrentUser(httpServletRequest);
+
+		if (!activeUserEntity.isPresent()) {
+			// System.out.print("Here 0\n");
+			return this.buildInvalidSessionResponse();
+		}
+		theModel.addObject(ViewModelNames.IS_ELEVATED_USER.getValue(),
+			this.isElevatedUser(activeUserEntity.get()));
+		return theModel;
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	public ModelAndView startWithProduct(@PathVariable final UUID productId) {
+	public ModelAndView startWithProduct(@PathVariable final UUID productId,
+		final HttpServletRequest httpServletRequest) 
+	{
 		final ModelAndView modelAndView =
 			new ModelAndView(ViewNames.PRODUCT_DETAIL.getViewName());
 
+		final Optional<ActiveUserEntity> activeUserEntity =
+			this.getCurrentUser(httpServletRequest);
+
+			if (!activeUserEntity.isPresent()) {
+				return this.buildInvalidSessionResponse();
+			}
+			
 		try {
 			modelAndView.addObject(
 				ViewModelNames.PRODUCT.getValue(),
@@ -44,7 +69,11 @@ public class ProductDetailRouteController {
 				(new Product())
 					.setCount(0)
 					.setLookupCode(StringUtils.EMPTY));
+
 		}
+
+		modelAndView.addObject(ViewModelNames.IS_ELEVATED_USER.getValue(),
+			this.isElevatedUser(activeUserEntity.get()));
 
 		return modelAndView;
 	}
@@ -52,4 +81,5 @@ public class ProductDetailRouteController {
 	// Properties
 	@Autowired
 	private ProductQuery productQuery;
+
 }
