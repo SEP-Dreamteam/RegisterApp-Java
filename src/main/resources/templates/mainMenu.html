@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 
 	<link rel="stylesheet" type="text/css" href="/styles/master.css">
+	<link rel="stylesheet" type="text/css" href="/styles/productListing.css">
+
 
 	<script type="text/javascript" src="/scripts/master.js" defer></script>
 	<script type="text/javascript" src="/scripts/mainMenu.js" defer></script>
@@ -33,6 +35,10 @@
 				<button id="productSalesReportButton" type="button" class="action" title="Functionality Not Available">Product Sales</button>
 				<br /><br />
 				<button id="cashierSalesReportButton" type="button" class="action" title="Functionality Not Available">Cashier Sales</button>
+				<br /><br />
+				<br /><br />
+				
+				<!-- <button type="button" class="action" title = 'sign out' onclick="signOutActionClickHandler()">Sign Out</button> -->
 			</div>
 		</div>
 	</div>
@@ -54,7 +60,10 @@
 	</div>
 
 	<div class="footer">
-		<!-- <img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer" /> -->
+		<button onclick="signOutActionClickHandler()" class="footer">
+			<img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer"/>
+		</button>
+		
 	</div>
 		
 </body>

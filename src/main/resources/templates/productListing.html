@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="productsWrapper">
-			<div>
+			<div th:class="not ${isElevatedUser} ? hidden : ''">
 				<a href="/productDetail/" class="button">Create New</a>
 			</div>
 
@@ -54,7 +54,10 @@
 			</script>
 		</div>
 	</div>
-		
+	
+	<button onclick="signOutActionClickHandler()" class="footer">
+		<img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer"/>
+	</button>
 </body>
 
 </html>
