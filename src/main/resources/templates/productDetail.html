@@ -34,7 +34,7 @@
 					<tr>
 						<td class="label">Lookup Code:</td>
 						<td>
-							<div id="deleteActionContainer" th:class="${isElevatedUser} ? hidden : ''">
+							<div id="deleteActionContainer" class="${isElevatedUser} ? hidden : ''">
 								<input id="productLookupCodeDisabled" type="text" th:value="${!product.isEmpty} ? ${product.lookupCode} : ''" class="update" disabled>
 							</div>
 							<div id="lookupCode" th:class="not ${isElevatedUser}? hidden : ''">
